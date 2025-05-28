@@ -1,4 +1,6 @@
 from tkinter import Tk, BOTH, Canvas
+import time
+
 
 class Window:
     def __init__(self, width, height): #so here i basically create a "canvas" on which the action will happen - empty list sort of
@@ -87,6 +89,62 @@ class Cell:
         move_line = Line(Point(x1, y1), Point(x2, y2))
         self.__win.draw_line(move_line, color)
 
-     
+class Maze:
+    def __init__(self,
+        x1,
+        y1,
+        num_rows,
+        num_cols,
+        cell_size_x,
+        cell_size_y,
+        win,):
+
+        self.__x1 = x1
+        self.__y1 = y1
+        self.__rows = num_rows
+        self.__cols = num_cols
+        self.__cell_size_x = cell_size_x
+        self.__cell_size_y = cell_size_y
+        self.__win = win
+
+        self.__cells = []  # 2D list: columns of rows
+        self.__create_cells()
+
+    def __create_cells(self):
+        for i in range(self.__cols):
+            column = []
+            for j in range(self.__rows):
+                cell = Cell(self.__win)
+                column.append(cell)
+            self.__cells.append(column)
+        
+        for i in range(self.__cols):
+            for j in range(self.__rows):
+                self.__draw_cell(i, j)
+    
+    def __draw_cell(self, i, j):
+        x1 = self.__x1 + i * self.__cell_size_x
+        y1 = self.__y1 + j * self.__cell_size_y
+        x2 = x1 + self.__cell_size_x
+        y2 = y1 + self.__cell_size_y
+        
+        self.__cells[i][j].draw(x1, y1, x2, y2)
+        self.animate()
+
+    def animate(self):
+        self.__win.redraw()
+        time.sleep(0.05)
+
+
+
+    
+
+
+
+         
+                       
+
+
+
 
 

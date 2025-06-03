@@ -45,7 +45,7 @@ class Line:
         )
 
 class Cell:
-    def __init__(self, win):
+    def __init__(self, win = None):
         self.has_left_wall = True
         self.has_right_wall = True
         self.has_top_wall = True
@@ -62,6 +62,9 @@ class Cell:
         self.__x2 = x2
         self.__y1 = y1
         self.__y2 = y2
+
+        if self.__win is None:
+            return
 
         if self.has_top_wall:
             top = Line(Point(x1, y1), Point(x2, y1))
@@ -80,6 +83,8 @@ class Cell:
             self.__win.draw_line(left, "black")
 
     def draw_move(self, to_cell, undo=False):
+        if self.__win is None:
+            return
         x1 = (self.__x1 + self.__x2) // 2
         y1 = (self.__y1 + self.__y2) // 2
         x2 = (to_cell.__x1 + to_cell.__x2) // 2
@@ -89,6 +94,7 @@ class Cell:
         move_line = Line(Point(x1, y1), Point(x2, y2))
         self.__win.draw_line(move_line, color)
 
+
 class Maze:
     def __init__(self,
         x1,
@@ -97,7 +103,7 @@ class Maze:
         num_cols,
         cell_size_x,
         cell_size_y,
-        win,):
+        win = None):
 
         self.__x1 = x1
         self.__y1 = y1
@@ -132,6 +138,8 @@ class Maze:
         self.animate()
 
     def animate(self):
+        if self.__win is None:
+            return
         self.__win.redraw()
         time.sleep(0.05)
 

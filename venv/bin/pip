@@ -1,4 +1,4 @@
-#!/home/rinatka777/workspace/github.com/Rinatka777/maze/venv/bin/python3
+#!/Users/ekaterinasharifullina/Documents/my_env/programming/Maze-Solver/venv/bin/python3.12
 # -*- coding: utf-8 -*-
 import re
 import sys

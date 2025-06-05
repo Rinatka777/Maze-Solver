@@ -9,7 +9,7 @@ def main():
         x1=50,
         y1=50,
         num_rows=10,
-        num_cols=10,
+        num_cols=15,
         cell_size_x=40,
         cell_size_y=40,
         win=win,

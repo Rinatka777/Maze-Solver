@@ -65,18 +65,31 @@ class Cell:
 
         if self.__win is None:
             return
+        
+        bg_color = "white"
 
+# Top wall (draw either way!)
         if self.has_top_wall:
-            top = Line(Point(x1, y1), Point(x2, y1))
-            self.__win.draw_line(top, "black")
+            color = "black"
+        else:
+            color = bg_color
+
+        top = Line(Point(x1, y1), Point(x2, y1))
+        self.__win.draw_line(top, color)
+
 
         if self.has_right_wall:
             right = Line(Point(x2, y1), Point(x2, y2))
             self.__win.draw_line(right, "black")
 
         if self.has_bottom_wall:
-            bottom = Line(Point(x1, y2), Point(x2, y2))
-            self.__win.draw_line(bottom, "black")
+            color = "black"
+        else:
+            color = bg_color
+
+        bottom = Line(Point(x1, y2), Point(x2, y2))
+        self.__win.draw_line(bottom, color)
+
 
         if self.has_left_wall:
             left = Line(Point(x1, y1), Point(x1, y2))
@@ -93,7 +106,6 @@ class Cell:
         color = "gray" if undo else "red"
         move_line = Line(Point(x1, y1), Point(x2, y2))
         self.__win.draw_line(move_line, color)
-
 
 class Maze:
     def __init__(self,
@@ -115,6 +127,8 @@ class Maze:
 
         self.__cells = []  # 2D list: columns of rows
         self.__create_cells()
+        self.__break_entrance_and_exit()
+
 
     def __create_cells(self):
         for i in range(self.__cols):
@@ -142,6 +156,16 @@ class Maze:
             return
         self.__win.redraw()
         time.sleep(0.05)
+    
+    def __break_entrance_and_exit(self):
+        self.__cells[0][0].has_top_wall = False
+        self. __draw_cell(0, 0)
+
+        last_col = self.__cols - 1
+        last_row = self.__rows - 1
+
+        self.__cells[last_col][last_row].has_bottom_wall = False
+        self. __draw_cell(last_col, last_row)
 
 
 

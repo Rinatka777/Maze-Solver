@@ -1,3 +1,4 @@
+import random
 from tkinter import Tk, BOTH, Canvas
 import time
 
@@ -50,6 +51,7 @@ class Cell:
         self.has_right_wall = True
         self.has_top_wall = True
         self.has_bottom_wall = True
+        self.visited = False
 
         self.__x1 = -1
         self.__x2 = -1
@@ -107,6 +109,17 @@ class Cell:
         move_line = Line(Point(x1, y1), Point(x2, y2))
         self.__win.draw_line(move_line, color)
 
+    def __break_walls_r(self, i, j):
+        self.__cells[i][j].visited = True
+
+        while True:
+            directions = []
+            if len(directions) == 0:
+                self.__draw_cell(i, j)
+            
+
+
+
 class Maze:
     def __init__(self,
         x1,
@@ -115,7 +128,8 @@ class Maze:
         num_cols,
         cell_size_x,
         cell_size_y,
-        win = None):
+        win = None,
+        seed = None):
 
         self.__x1 = x1
         self.__y1 = y1
@@ -124,6 +138,10 @@ class Maze:
         self.__cell_size_x = cell_size_x
         self.__cell_size_y = cell_size_y
         self.__win = win
+        self.__seed = seed
+
+        if self.__seed is not None:
+            random.seed(self.__seed)
 
         self.__cells = []  # 2D list: columns of rows
         self.__create_cells()

@@ -114,8 +114,21 @@ class Cell:
 
         while True:
             directions = []
+            if i > 0 and not self.__cells[i-1][j].visited:
+                directions.append(("L", i-1, j))
+            if i < self.__cols - 1 and not self.__cells[i-1][j]:
+                directions.append(("R", i+1, j))
+            if j > 0 and not self.__cells[i][j-1].visited:
+                directions.append(("U", i, j-1))
+            if j < self.__rows - 1 and not self.__cells[i][j-1]:
+                directions.append(("R", i, j+1))
+
             if len(directions) == 0:
                 self.__draw_cell(i, j)
+                return 
+            
+            direction, next_i, next_j = random.choice(direction)
+            self.__break_walls_r()
             
 
 

@@ -109,30 +109,7 @@ class Cell:
         move_line = Line(Point(x1, y1), Point(x2, y2))
         self.__win.draw_line(move_line, color)
 
-    def __break_walls_r(self, i, j):
-        self.__cells[i][j].visited = True
-
-        while True:
-            directions = []
-            if i > 0 and not self.__cells[i-1][j].visited:
-                directions.append(("L", i-1, j))
-            if i < self.__cols - 1 and not self.__cells[i-1][j]:
-                directions.append(("R", i+1, j))
-            if j > 0 and not self.__cells[i][j-1].visited:
-                directions.append(("U", i, j-1))
-            if j < self.__rows - 1 and not self.__cells[i][j-1]:
-                directions.append(("R", i, j+1))
-
-            if len(directions) == 0:
-                self.__draw_cell(i, j)
-                return 
-            
-            direction, next_i, next_j = random.choice(direction)
-            self.__break_walls_r()
-            
-
-
-
+    
 class Maze:
     def __init__(self,
         x1,
@@ -159,6 +136,8 @@ class Maze:
         self.__cells = []  # 2D list: columns of rows
         self.__create_cells()
         self.__break_entrance_and_exit()
+        self.__break_walls_r(0,0)
+        self.__reset_cells_visited()
 
 
     def __create_cells(self):
@@ -198,6 +177,44 @@ class Maze:
         self.__cells[last_col][last_row].has_bottom_wall = False
         self. __draw_cell(last_col, last_row)
 
+    def __reset_cells_visited(self):
+        for col in self.__cells:
+            for cell in col:
+                cell.visited = False
+
+    def __break_walls_r(self, i, j):
+        self.__cells[i][j].visited = True
+        while True:
+            directions = []
+            if i > 0 and not self.__cells[i-1][j].visited:
+                directions.append(("L", i-1, j))
+            if i < self.__cols - 1 and not self.__cells[i-1][j]:
+                directions.append(("R", i+1, j))
+            if j > 0 and not self.__cells[i][j-1].visited:
+                directions.append(("U", i, j-1))
+            if j < self.__rows - 1 and not self.__cells[i][j-1]:
+                directions.append(("R", i, j+1))
+
+            if len(directions) == 0:
+                self.__draw_cell(i, j)
+                return
+            
+
+            direction, ni, nj = random.choice(directions)
+            if direction == "L":
+                self.__cells[i][j].has_left_wall = False
+                self.__cells[ni][nj].has_right_wall = False
+            elif direction == "R":
+                self.__cells[i][j].has_right_wall = False
+                self.__cells[ni][nj].has_left_wall = False
+            elif direction == "U":
+                self.__cells[i][j].has_top_wall = False
+                self.__cells[ni][nj].has_bottom_wall = False
+            elif direction == "D":
+                self.__cells[i][j].has_bottom_wall = False
+                self.__cells[ni][nj].has_top_wall = False
+
+            self.__break_walls_r(ni, nj)
 
 
     

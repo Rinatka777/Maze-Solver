@@ -46,7 +46,9 @@ class Tests(unittest.TestCase):
         for col in maze._Maze__cells:
             for cell in col:
                 self.assertFalse(cell.visited)
-    
+    def git_test(text):
+        text = "everything is fine"
+        print(text)
 
 if __name__ == "__main__":
     unittest.main()

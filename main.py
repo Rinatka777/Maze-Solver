@@ -14,8 +14,9 @@ def main():
         cell_size_y=40,
         win=win,
     )
+    maze.solve()
     win.wait_for_close()
-
+    
 
 if __name__ == "__main__":
     main()

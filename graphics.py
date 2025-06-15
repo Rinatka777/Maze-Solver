@@ -186,14 +186,18 @@ class Maze:
         self.__cells[i][j].visited = True
         while True:
             directions = []
+            # LEFT
             if i > 0 and not self.__cells[i-1][j].visited:
                 directions.append(("L", i-1, j))
-            if i < self.__cols - 1 and not self.__cells[i-1][j]:
+# RIGHT
+            if i < self.__cols - 1 and not self.__cells[i+1][j].visited:
                 directions.append(("R", i+1, j))
+# UP
             if j > 0 and not self.__cells[i][j-1].visited:
                 directions.append(("U", i, j-1))
-            if j < self.__rows - 1 and not self.__cells[i][j-1]:
-                directions.append(("R", i, j+1))
+# DOWN
+            if j < self.__rows - 1 and not self.__cells[i][j+1].visited:
+                directions.append(("D", i, j+1))
 
             if len(directions) == 0:
                 self.__draw_cell(i, j)
@@ -215,6 +219,48 @@ class Maze:
                 self.__cells[ni][nj].has_top_wall = False
 
             self.__break_walls_r(ni, nj)
+
+    def _solve_r(self, i, j):
+        self.animate()
+        self.__cells[i][j].visited = True
+
+        last_col = self.__cols - 1
+        last_row = self.__rows - 1
+
+        if i == last_col and j == last_row:
+            return True
+        
+        
+        directions = [
+            ("L", i -1, j),
+            ("R", i + 1, j),
+            ("U", i, j-1),
+            ("D", i, j+1)
+            ]
+        for direction, next_i, next_j in directions:
+            if 0<= next_i < self.__cols and 0 <= next_j < self.__rows:
+                current_cell = self.__cells[i][j]
+                next_cell = self.__cells[next_i][next_j]
+
+                if not next_cell.visited:
+                    path_open = (
+                        (direction == "L" and not current_cell.has_left_wall) or
+                        (direction == "R" and not current_cell.has_right_wall) or 
+                        (direction == "U" and not current_cell.has_top_wall) or
+                        (direction == "D" and not current_cell.has_bottom_wall)
+                    )
+
+                    if path_open:
+                        current_cell.draw_move(next_cell)
+                        if self._solve_r(next_i, next_j):
+                            return True
+                        current_cell.draw_move(next_cell, undo = True)
+        return False
+    
+    def solve(self):
+        return self._solve_r(0,0)
+    
+
 
 
     
